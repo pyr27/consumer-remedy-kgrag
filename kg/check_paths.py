@@ -32,7 +32,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_graph import DATA, SEMANTIC, connect  # noqa: E402
 
-EXCLUDE = {"kca_0542"}  # 정답 근거 지정 오류 의심으로 분석에서 제외 (CLAUDE.md 미결 항목)
+EXCLUDE: set[str] = set()  # kca_0542는 정답 근거를 -20으로 정정해 포함 (2026-10-21 저자 확인)
 MAX_HOPS = 4
 SEARCH_HOPS = 10  # 실패한 쌍도 실제 거리를 보여 주기 위해 더 멀리까지 찾는다
 N_CONTROL = 200
@@ -80,11 +80,15 @@ def scope(driver, cats: list[str], hop: bool) -> set[str]:
     q = """MATCH (c:Category)-[:APPLIES_TO]->(:Article)-[:HAS_UNIT]->(u:Unit)
            WHERE c.category_id IN $cats OR c.kind = 'cross' RETURN DISTINCT u.unit_id AS id"""
     if hop:
+        # USES_TERM은 '쓰는 조항 → 정의' 방향으로만 따라간다. 거꾸로 가면 정의 하나가 그 용어를 쓰는 조항 수십 개를 끌어온다.
+        both = "|".join(r for r in SEMANTIC if r != "USES_TERM")
         q = f"""MATCH (c:Category)-[:APPLIES_TO]->(:Article)-[:HAS_UNIT]->(u:Unit)
                 WHERE c.category_id IN $cats OR c.kind = 'cross'
-                OPTIONAL MATCH (u)-[:{rels}]-(v:Unit)
-                OPTIONAL MATCH (u)-[:{rels}]-(:Article)-[:HAS_UNIT]->(w:Unit)
-                WITH collect(DISTINCT u.unit_id) + collect(DISTINCT v.unit_id) + collect(DISTINCT w.unit_id) AS ids
+                OPTIONAL MATCH (u)-[:{both}]-(v:Unit)
+                OPTIONAL MATCH (u)-[:{both}]-(:Article)-[:HAS_UNIT]->(w:Unit)
+                OPTIONAL MATCH (u)-[:USES_TERM]->(t:Unit)
+                WITH collect(DISTINCT u.unit_id) + collect(DISTINCT v.unit_id) + collect(DISTINCT w.unit_id)
+                     + collect(DISTINCT t.unit_id) AS ids
                 UNWIND ids AS id RETURN DISTINCT id"""
     return {r["id"] for r in driver.execute_query(q, {"cats": cats})[0] if r["id"]}
 

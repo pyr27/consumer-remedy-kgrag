@@ -22,7 +22,16 @@ python kg/extract_edges.py --show ecom-17-3 # 조항 하나에서 뽑힌 관계 
 python -m pytest kg -q                      # 추출 규칙 회귀 테스트
 python kg/check_paths.py                    # 합격 기준: FAQ 근거 쌍 strict ≤4 hop
 ```
-그래프는 `data/legal_corpus.json`(+ `data/edges.csv`)에서 언제든 다시 만들 수 있다. DB를 지워도(`docker compose down -v`) 잃는 것은 없다.
+그래프는 `data/legal_corpus.json`(+ `data/edges.csv`, `data/categories.csv`)에서 언제든 다시 만들 수 있다.
+
+## 3. 검색 (2주차)
+```powershell
+python kg/retrieve.py "헬스장 1년 계약했는데 3개월 만에 그만두면 위약금은?"   # 라우팅·근거 묶음 출력
+python kg/retrieve.py --route continuous "…"                              # 라우팅 지정 (none = 전체)
+python kg/eval_retrieval.py --route llm --tag r3                          # 42문항 검색 평가 (생성 없음)
+python kg/eval_retrieval.py --route oracle --tag r3                       # 라우팅을 정답으로 준 상한
+```
+LLM 라우팅·재작성 결과는 `results/kg/route_cache.json`에 캐시된다(같은 질문 재실행 비용 0). DB를 지워도(`docker compose down -v`) 잃는 것은 없다.
 
 ## 3. 브라우저에서 확인해 볼 쿼리
 ```cypher
