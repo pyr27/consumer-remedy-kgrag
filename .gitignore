@@ -1,0 +1,9 @@
+.env
+__pycache__/
+raw/
+results/
+data/embedding_cache.jsonl
+data/legal_corpus_handmade.json
+*.zip
+CLAUDE.md
+

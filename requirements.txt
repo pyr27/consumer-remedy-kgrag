@@ -1,0 +1,14 @@
+# 필수 (키 없이 파이프라인 검증까지 가능)
+numpy>=1.24
+scikit-learn>=1.3
+
+# 실제 측정용 — 둘 중 하나 이상 선택
+openai>=1.40            # --embedder openai --llm openai
+anthropic>=0.34         # --llm anthropic
+
+# 로컬 임베딩을 쓸 경우에만 (torch 포함, 용량 큼)
+# sentence-transformers>=3.0
+
+# 지식그래프 (본 개발)
+neo4j>=5.20
+python-dotenv>=1.0

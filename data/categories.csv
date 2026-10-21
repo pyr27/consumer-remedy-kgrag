@@ -1,0 +1,10 @@
+category_id,name,kind,law_id,articles,basis,reviewer,approved
+ecommerce,통신판매(전자상거래),transaction,ecom,5-22,전자상거래법 제2장 전자상거래 및 통신판매,claude(AI),y
+ecommerce,통신판매(전자상거래),transaction,ecomg,*,전자상거래 등에서의 소비자보호 지침 전체(법 제21조 등 해석 기준),claude(AI),y
+door_sales,방문판매·전화권유판매,transaction,door,5-12,방문판매법 제2장 방문판매 및 전화권유판매,claude(AI),y
+multilevel,다단계판매·후원방문판매,transaction,door,13-29,방문판매법 제3장 다단계판매 및 후원방문판매,claude(AI),y
+continuous,계속거래·사업권유거래,transaction,door,30-34,방문판매법 제4장 계속거래 및 사업권유거래,claude(AI),y
+continuous,계속거래·사업권유거래,transaction,contfee,*,계속거래 등의 해지·해제에 따른 위약금 및 대금의 환급에 관한 산정기준 전체(법 제32조제4항),claude(AI),y
+installment,할부거래,transaction,inst,5-17,할부거래법 제2장 할부거래,claude(AI),y
+prepaid,선불식 할부거래(상조 등),transaction,inst,18-41,할부거래법 제3장 선불식 할부거래,claude(AI),y
+standard_terms,약관 일반(불공정약관),cross,term,3-16,약관법 제1장 총칙 중 제3~5조(명시·설명의무·개별약정 우선·해석) + 제2장 불공정약관조항(제6~16조); 모든 거래 유형의 약관에 적용,claude(AI),y

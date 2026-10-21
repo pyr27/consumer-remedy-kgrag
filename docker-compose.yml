@@ -1,0 +1,21 @@
+# 법령 지식그래프용 Neo4j (로컬 개발용)
+#   docker compose up -d        시작
+#   docker compose down         중지 (데이터 유지)
+#   docker compose down -v      중지 + 데이터 삭제 (그래프는 build_graph.py로 언제든 재생성)
+services:
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: legal-kg-neo4j
+    ports:
+      - "7474:7474"   # 브라우저 http://localhost:7474
+      - "7687:7687"   # 파이썬 드라이버 bolt://localhost:7687
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-legalkg1234}
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 512m
+    volumes:
+      - neo4j_data:/data
+    restart: unless-stopped
+volumes:
+  neo4j_data:
